@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Street Light — Digital Twin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/scene.css"/>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="topnav">
+  <span class="nav-title">⚡ SMART STREET LIGHT — DIGITAL TWIN</span>
+  <div class="nav-links">
+    <a href="index.html"           class="nav-link active">🌆 Scene</a>
+    <a href="graph.html"           class="nav-link">🔗 Node Graph</a>
+    <a href="analytics.html"       class="nav-link">📊 Analytics</a>
+    <a href="prediction.html"      class="nav-link">🤖 Prediction</a>
+    <a href="fault-detection.html" class="nav-link">⚠️ Fault Detection</a>
+    <a href="fault-correction.html"class="nav-link">🔧 Fault Correction</a>
+  </div>
+  <div id="conn-dot" class="conn-dot conn-ok" title="Backend connection"></div>
+</nav>
+
+<!-- ── HUD OVERLAY ── -->
+<div id="hud">
+  <div class="hud-card">
+    <div class="hud-label">TEMP</div>
+    <div class="hud-val" id="hud-temp">--</div>
+    <div class="hud-unit">°C</div>
+  </div>
+  <div class="hud-card">
+    <div class="hud-label">HUMIDITY</div>
+    <div class="hud-val" id="hud-hum">--</div>
+    <div class="hud-unit">%</div>
+  </div>
+  <div class="hud-card">
+    <div class="hud-label">LDR</div>
+    <div class="hud-val" id="hud-ldr">--</div>
+    <div class="hud-unit" id="hud-ldr-cond">--</div>
+  </div>
+  <div class="hud-card">
+    <div class="hud-label">LED 1</div>
+    <div class="hud-val" id="hud-led1">OFF</div>
+  </div>
+  <div class="hud-card">
+    <div class="hud-label">LED 2</div>
+    <div class="hud-val" id="hud-led2">OFF</div>
+  </div>
+  <div class="hud-card">
+    <div class="hud-label">IR 1</div>
+    <div class="hud-val" id="hud-ir1">CLEAR</div>
+  </div>
+  <div class="hud-card">
+    <div class="hud-label">IR 2</div>
+    <div class="hud-val" id="hud-ir2">CLEAR</div>
+  </div>
+</div>
+
+<!-- ── SCENE ── -->
+<div id="scene">
+
+  <!-- Sky layers -->
+  <div id="sky"></div>
+  <div id="stars"></div>
+  <div id="clouds">
+    <div class="cloud" style="top:8%;left:10%;animation-duration:60s;"></div>
+    <div class="cloud" style="top:14%;left:40%;animation-duration:80s;animation-delay:-20s;"></div>
+    <div class="cloud" style="top:6%;left:70%;animation-duration:70s;animation-delay:-35s;"></div>
+  </div>
+
+  <!-- Sun / Moon -->
+  <div id="sun-moon"></div>
+
+  <!-- Rain -->
+  <canvas id="rain-canvas"></canvas>
+
+  <!-- Buildings background -->
+  <div id="buildings">
+    <div class="building" style="height:120px;width:60px;left:2%;"></div>
+    <div class="building" style="height:180px;width:80px;left:7%;"></div>
+    <div class="building" style="height:140px;width:55px;left:14%;"></div>
+    <div class="building" style="height:200px;width:90px;left:20%;"></div>
+    <div class="building" style="height:160px;width:70px;left:28%;"></div>
+    <div class="building" style="height:220px;width:100px;left:35%;"></div>
+    <div class="building" style="height:150px;width:65px;left:44%;"></div>
+    <div class="building" style="height:190px;width:85px;left:51%;"></div>
+    <div class="building" style="height:130px;width:60px;left:59%;"></div>
+    <div class="building" style="height:210px;width:95px;left:65%;"></div>
+    <div class="building" style="height:170px;width:75px;left:73%;"></div>
+    <div class="building" style="height:145px;width:65px;left:80%;"></div>
+    <div class="building" style="height:195px;width:88px;left:87%;"></div>
+    <div class="building" style="height:125px;width:58px;left:94%;"></div>
+  </div>
+
+  <!-- Trees -->
+  <div id="trees">
+    <div class="tree" style="left:5%"></div>
+    <div class="tree" style="left:22%"></div>
+    <div class="tree" style="left:48%"></div>
+    <div class="tree" style="left:72%"></div>
+    <div class="tree" style="left:91%"></div>
+  </div>
+
+  <!-- Street lights -->
+  <div class="street-light" id="light1" style="left:25%">
+    <div class="pole"></div>
+    <div class="arm"></div>
+    <div class="lamp-housing">
+      <div class="lamp" id="lamp1"></div>
+      <div class="glow-halo" id="halo1"></div>
+    </div>
+    <div class="ir-badge" id="ir1-badge">IR1</div>
+    <div class="light-cone" id="cone1"></div>
+  </div>
+
+  <div class="street-light" id="light2" style="left:65%">
+    <div class="pole"></div>
+    <div class="arm"></div>
+    <div class="lamp-housing">
+      <div class="lamp" id="lamp2"></div>
+      <div class="glow-halo" id="halo2"></div>
+    </div>
+    <div class="ir-badge" id="ir2-badge">IR2</div>
+    <div class="light-cone" id="cone2"></div>
+  </div>
+
+  <!-- Road -->
+  <div id="road">
+    <div id="road-markings">
+      <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+      <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+      <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+      <div class="dash"></div>
+    </div>
+  </div>
+
+  <!-- Vehicles -->
+  <div class="vehicle car" id="vehicle1">🚗</div>
+  <div class="vehicle person" id="vehicle2">🚶</div>
+  <div class="vehicle car" id="vehicle3">🚕</div>
+
+  <!-- Fog overlay -->
+  <div id="fog"></div>
+
+  <!-- Environment label -->
+  <div id="env-label"></div>
+
+</div>
+
+<!-- ── HISTORY CHART ── -->
+<div id="history-panel">
+  <div class="panel-title">📊 Historical Data (last 200 readings from data.csv)</div>
+  <div class="chart-row">
+    <div class="chart-box">
+      <canvas id="hist-temphum"></canvas>
+    </div>
+    <div class="chart-box">
+      <canvas id="hist-ldr"></canvas>
+    </div>
+    <div class="chart-box">
+      <canvas id="hist-ir"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="js/scene.js"></script>
+</body>
+</html>

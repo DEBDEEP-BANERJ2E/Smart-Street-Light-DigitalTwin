@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Street Light — Analytics</title>
+  <link rel="stylesheet" href="css/ml-shared.css"/>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="nav-title">⚡ SMART STREET LIGHT — DIGITAL TWIN</span>
+  <div class="nav-links">
+    <a href="index.html"           class="nav-link">🌆 Scene</a>
+    <a href="graph.html"           class="nav-link">🔗 Node Graph</a>
+    <a href="analytics.html"       class="nav-link active">📊 Analytics</a>
+    <a href="prediction.html"      class="nav-link">🤖 Prediction</a>
+    <a href="fault-detection.html" class="nav-link">⚠️ Fault Detection</a>
+    <a href="fault-correction.html"class="nav-link">🔧 Fault Correction</a>
+  </div>
+  <div id="ml-status-dot" class="ml-status-dot" title="ML Service status"></div>
+</nav>
+
+<div id="ml-banner" class="ml-banner"></div>
+
+<main class="ml-page">
+
+  <!-- ── SUMMARY STATS ── -->
+  <div class="section-title">📈 Summary Statistics</div>
+  <div class="stat-grid" id="stat-grid">
+    <div class="stat-card" id="stat-temp">
+      <div class="stat-card-label">Temperature</div>
+      <div class="stat-card-value" id="stat-temp-mean">--</div>
+      <div class="stat-card-meta">
+        min <span id="stat-temp-min">--</span> &nbsp;
+        max <span id="stat-temp-max">--</span><br>
+        std <span id="stat-temp-std">--</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-hum">
+      <div class="stat-card-label">Humidity</div>
+      <div class="stat-card-value" id="stat-hum-mean">--</div>
+      <div class="stat-card-meta">
+        min <span id="stat-hum-min">--</span> &nbsp;
+        max <span id="stat-hum-max">--</span><br>
+        std <span id="stat-hum-std">--</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-ldr">
+      <div class="stat-card-label">LDR</div>
+      <div class="stat-card-value" id="stat-ldr-mean">--</div>
+      <div class="stat-card-meta">
+        min <span id="stat-ldr-min">--</span> &nbsp;
+        max <span id="stat-ldr-max">--</span><br>
+        std <span id="stat-ldr-std">--</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-ir1">
+      <div class="stat-card-label">IR Sensor 1</div>
+      <div class="stat-card-value" id="stat-ir1-mean">--</div>
+      <div class="stat-card-meta">
+        min <span id="stat-ir1-min">--</span> &nbsp;
+        max <span id="stat-ir1-max">--</span><br>
+        std <span id="stat-ir1-std">--</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-ir2">
+      <div class="stat-card-label">IR Sensor 2</div>
+      <div class="stat-card-value" id="stat-ir2-mean">--</div>
+      <div class="stat-card-meta">
+        min <span id="stat-ir2-min">--</span> &nbsp;
+        max <span id="stat-ir2-max">--</span><br>
+        std <span id="stat-ir2-std">--</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TIME-SERIES CHARTS ── -->
+  <div class="section-title">📉 Time-Series</div>
+  <div class="chart-grid">
+    <div class="chart-panel">
+      <div class="chart-panel-title">TEMPERATURE &amp; HUMIDITY</div>
+      <div class="chart-wrap"><canvas id="chart-temphum"></canvas></div>
+    </div>
+    <div class="chart-panel">
+      <div class="chart-panel-title">LDR LIGHT LEVEL</div>
+      <div class="chart-wrap"><canvas id="chart-ldr"></canvas></div>
+    </div>
+    <div class="chart-panel">
+      <div class="chart-panel-title">IR SENSORS</div>
+      <div class="chart-wrap"><canvas id="chart-ir"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ── CORRELATION HEATMAP ── -->
+  <div class="section-title">🔗 Correlation Heatmap</div>
+  <div class="panel">
+    <div class="heatmap-wrap">
+      <canvas id="corr-canvas" width="480" height="480"></canvas>
+    </div>
+  </div>
+
+  <!-- ── HISTOGRAMS ── -->
+  <div class="section-title">📊 Distributions</div>
+  <div class="chart-grid">
+    <div class="chart-panel">
+      <div class="chart-panel-title">LDR DISTRIBUTION</div>
+      <div class="chart-wrap"><canvas id="hist-ldr"></canvas></div>
+    </div>
+    <div class="chart-panel">
+      <div class="chart-panel-title">TEMPERATURE DISTRIBUTION</div>
+      <div class="chart-wrap"><canvas id="hist-temp"></canvas></div>
+    </div>
+    <div class="chart-panel">
+      <div class="chart-panel-title">HUMIDITY DISTRIBUTION</div>
+      <div class="chart-wrap"><canvas id="hist-hum"></canvas></div>
+    </div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="js/ml-api.js"></script>
+<script src="js/analytics-page.js"></script>
+</body>
+</html>

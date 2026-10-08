@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Street Light — Prediction</title>
+  <link rel="stylesheet" href="css/ml-shared.css"/>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="nav-title">⚡ SMART STREET LIGHT — DIGITAL TWIN</span>
+  <div class="nav-links">
+    <a href="index.html"           class="nav-link">🌆 Scene</a>
+    <a href="graph.html"           class="nav-link">🔗 Node Graph</a>
+    <a href="analytics.html"       class="nav-link">📊 Analytics</a>
+    <a href="prediction.html"      class="nav-link active">🤖 Prediction</a>
+    <a href="fault-detection.html" class="nav-link">⚠️ Fault Detection</a>
+    <a href="fault-correction.html"class="nav-link">🔧 Fault Correction</a>
+  </div>
+  <div id="ml-status-dot" class="ml-status-dot" title="ML Service status"></div>
+</nav>
+
+<div id="ml-banner" class="ml-banner"></div>
+
+<main class="ml-page">
+
+  <!-- ── LED PREDICTION ── -->
+  <div class="section-title">🤖 LED State Prediction</div>
+  <div class="panel">
+    <form id="led-form" class="ml-form" autocomplete="off">
+      <div class="ml-form-row">
+        <label class="ml-label" for="in-ldr">LDR</label>
+        <input class="ml-input" type="number" id="in-ldr" placeholder="0–4095" min="0" max="4095" step="1" required/>
+        <label class="ml-label" for="in-ir1">IR1</label>
+        <input class="ml-input" type="number" id="in-ir1" placeholder="0 or 1" min="0" max="1" step="1" required/>
+        <label class="ml-label" for="in-ir2">IR2</label>
+        <input class="ml-input" type="number" id="in-ir2" placeholder="0 or 1" min="0" max="1" step="1" required/>
+      </div>
+      <div class="ml-form-row">
+        <label class="ml-label" for="in-temp">Temp (°C)</label>
+        <input class="ml-input" type="number" id="in-temp" placeholder="e.g. 27.1" step="0.1" required/>
+        <label class="ml-label" for="in-hum">Humidity (%)</label>
+        <input class="ml-input" type="number" id="in-hum" placeholder="e.g. 80.0" step="0.1" required/>
+        <button class="btn" type="submit">PREDICT</button>
+      </div>
+    </form>
+
+    <div class="result-box" id="led-result">
+      <div class="result-placeholder">Enter sensor values and click PREDICT</div>
+    </div>
+  </div>
+
+  <!-- ── LDR FORECAST ── -->
+  <div class="section-title">☀️ LDR Forecast</div>
+  <div class="panel">
+    <div class="ml-form-row" style="margin-bottom:14px">
+      <label class="ml-label" for="ldr-steps">Steps</label>
+      <input class="ml-range" type="range" id="ldr-steps" min="1" max="60" value="10"/>
+      <span id="ldr-steps-val" style="color:var(--cyan);font-family:var(--font-head);font-size:0.8rem;min-width:28px">10</span>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="chart-ldr-forecast"></canvas></div>
+  </div>
+
+  <!-- ── TEMPERATURE FORECAST ── -->
+  <div class="section-title">🌡️ Temperature Forecast</div>
+  <div class="panel">
+    <div class="ml-form-row" style="margin-bottom:14px">
+      <label class="ml-label" for="temp-steps">Steps</label>
+      <input class="ml-range" type="range" id="temp-steps" min="1" max="60" value="10"/>
+      <span id="temp-steps-val" style="color:var(--cyan);font-family:var(--font-head);font-size:0.8rem;min-width:28px">10</span>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="chart-temp-forecast"></canvas></div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script src="js/ml-api.js"></script>
+<script src="js/prediction-page.js"></script>
+</body>
+</html>

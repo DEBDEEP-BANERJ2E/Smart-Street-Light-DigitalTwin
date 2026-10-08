@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Street Light — Fault Correction</title>
+  <link rel="stylesheet" href="css/ml-shared.css"/>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="nav-title">⚡ SMART STREET LIGHT — DIGITAL TWIN</span>
+  <div class="nav-links">
+    <a href="index.html"           class="nav-link">🌆 Scene</a>
+    <a href="graph.html"           class="nav-link">🔗 Node Graph</a>
+    <a href="analytics.html"       class="nav-link">📊 Analytics</a>
+    <a href="prediction.html"      class="nav-link">🤖 Prediction</a>
+    <a href="fault-detection.html" class="nav-link">⚠️ Fault Detection</a>
+    <a href="fault-correction.html"class="nav-link active">🔧 Fault Correction</a>
+  </div>
+  <div id="ml-status-dot" class="ml-status-dot" title="ML Service status"></div>
+</nav>
+
+<div id="ml-banner" class="ml-banner"></div>
+
+<main class="ml-page">
+
+  <!-- ── RECOMMENDATIONS ── -->
+  <div class="section-title">🔧 Recommendations</div>
+  <div id="rec-grid" class="rec-grid">
+    <div class="empty-state">Loading recommendations...</div>
+  </div>
+
+  <!-- ── RETRAIN ── -->
+  <div class="section-title">🔄 Model Retraining</div>
+  <div class="panel">
+    <button class="btn btn-amber" id="retrain-btn">🔄 Retrain Models</button>
+    <div class="retrain-result" id="retrain-result"></div>
+  </div>
+
+  <!-- ── MODEL STATUS ── -->
+  <div class="section-title">💡 Model Status</div>
+  <div class="panel" id="health-panel">
+    <div class="empty-state">Loading...</div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="js/ml-api.js"></script>
+<script src="js/fault-correction-page.js"></script>
+</body>
+</html>

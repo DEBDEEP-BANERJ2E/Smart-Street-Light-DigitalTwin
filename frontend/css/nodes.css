@@ -1,0 +1,250 @@
+/* nodes.css — Node card styles, LED glow/dim, sensor pulse */
+
+/* ── Base node card ────────────────────────────────────────────────────── */
+.node-card {
+  background: rgba(13, 13, 40, 0.85);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  min-width: 110px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: grab;
+  position: relative;
+  overflow: hidden;
+}
+
+.node-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.node-card:hover {
+  border-color: rgba(0, 229, 255, 0.5);
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.15);
+}
+
+.node-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.55rem;
+  color: #718096;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.node-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem;
+  color: #00e5ff;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+.node-sub {
+  font-size: 0.7rem;
+  color: #718096;
+  margin-top: 4px;
+}
+
+/* ── Pulse border on value update ──────────────────────────────────────── */
+@keyframes pulse-border {
+  0%   { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.6); }
+  50%  { box-shadow: 0 0 0 6px rgba(0, 229, 255, 0.1); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+}
+
+.pulse-update {
+  animation: pulse-border 0.8s ease-out;
+}
+
+/* ── LED node states ───────────────────────────────────────────────────── */
+.node-card.led-on {
+  border-color: rgba(255, 171, 0, 0.6);
+  box-shadow: 0 0 20px rgba(255, 171, 0, 0.35), 0 0 40px rgba(255, 171, 0, 0.15);
+  background: rgba(30, 20, 5, 0.9);
+}
+
+.node-card.led-on .node-value {
+  color: #ffab00;
+  text-shadow: 0 0 12px rgba(255, 171, 0, 0.7);
+}
+
+.node-card.led-on .node-title {
+  color: rgba(255, 171, 0, 0.6);
+}
+
+.node-card.led-off {
+  border-color: rgba(50, 50, 80, 0.5);
+  box-shadow: none;
+  background: rgba(13, 13, 26, 0.7);
+}
+
+.node-card.led-off .node-value {
+  color: #4a5568;
+  text-shadow: none;
+}
+
+/* LED glow halo animation */
+@keyframes led-glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 171, 0, 0.35), 0 0 40px rgba(255, 171, 0, 0.15); }
+  50%       { box-shadow: 0 0 30px rgba(255, 171, 0, 0.55), 0 0 60px rgba(255, 171, 0, 0.25); }
+}
+
+.node-card.led-on {
+  animation: led-glow-pulse 2s ease-in-out infinite;
+}
+
+/* ── LDR badge ─────────────────────────────────────────────────────────── */
+.ldr-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.ldr-badge.dark {
+  background: rgba(21, 101, 192, 0.3);
+  color: #90caf9;
+  border: 1px solid rgba(21, 101, 192, 0.5);
+}
+
+.ldr-badge.bright {
+  background: rgba(255, 235, 59, 0.15);
+  color: #ffeb3b;
+  border: 1px solid rgba(255, 235, 59, 0.4);
+}
+
+/* ── IR state label ────────────────────────────────────────────────────── */
+.ir-state {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.ir-state.motion {
+  background: rgba(255, 23, 68, 0.2);
+  color: #ff6090;
+  border: 1px solid rgba(255, 23, 68, 0.4);
+}
+
+.ir-state.clear {
+  background: rgba(0, 230, 118, 0.1);
+  color: #69f0ae;
+  border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+/* ── Motion indicator ──────────────────────────────────────────────────── */
+.motion-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(13, 13, 40, 0.7);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  transition: all 0.4s ease;
+}
+
+.motion-indicator .mi-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: #718096;
+}
+
+.motion-radar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.motion-radar::before,
+.motion-radar::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transition: all 0.4s;
+}
+
+.motion-radar::before {
+  width: 70%;
+  height: 70%;
+  border-color: #333;
+}
+
+.motion-radar::after {
+  width: 40%;
+  height: 40%;
+  border-color: #333;
+  background: #333;
+}
+
+/* Active state */
+.motion-active .motion-radar {
+  border-color: #ff1744;
+  box-shadow: 0 0 16px rgba(255, 23, 68, 0.5);
+}
+
+.motion-active .motion-radar::before {
+  border-color: rgba(255, 23, 68, 0.5);
+}
+
+.motion-active .motion-radar::after {
+  border-color: #ff1744;
+  background: #ff1744;
+  box-shadow: 0 0 8px rgba(255, 23, 68, 0.8);
+}
+
+.motion-active .mi-label {
+  color: #ff6090;
+}
+
+/* Radar sweep animation */
+@keyframes radar-sweep {
+  0%   { transform: rotate(0deg); opacity: 0.8; }
+  100% { transform: rotate(360deg); opacity: 0.8; }
+}
+
+@keyframes radar-ping {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.motion-active .motion-radar::before {
+  animation: radar-ping 1.2s ease-out infinite;
+}
+
+/* Inactive state */
+.motion-inactive .motion-radar {
+  border-color: #2d3748;
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+/* ── Sensor node type colors ───────────────────────────────────────────── */
+.node-temp  .node-value { color: #ff6b6b; text-shadow: 0 0 8px rgba(255,107,107,0.4); }
+.node-hum   .node-value { color: #4ecdc4; text-shadow: 0 0 8px rgba(78,205,196,0.4); }
+.node-ldr   .node-value { color: #ffeb3b; text-shadow: 0 0 8px rgba(255,235,59,0.4); }
+.node-ir    .node-value { color: #00e5ff; }

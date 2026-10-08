@@ -1,0 +1,414 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cyan: #00e5ff;
+  --amber: #ffab00;
+  --red: #ff1744;
+  --green: #00e676;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-head: 'Orbitron', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  background: #0d0d1a;
+  color: #e2e8f0;
+  font-family: var(--font-mono);
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+.topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 20px;
+  background: rgba(10,10,26,0.92);
+  border-bottom: 1px solid rgba(0,229,255,0.2);
+  backdrop-filter: blur(8px);
+}
+.nav-title {
+  font-family: var(--font-head);
+  font-size: 0.75rem;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  flex: 1;
+}
+.nav-links { display: flex; gap: 8px; }
+.nav-link {
+  padding: 5px 14px;
+  border: 1px solid rgba(0,229,255,0.3);
+  border-radius: 4px;
+  color: #718096;
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+.nav-link:hover, .nav-link.active {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(0,229,255,0.08);
+}
+.conn-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-left: 8px;
+}
+.conn-ok  { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.conn-err { background: var(--red);   box-shadow: 0 0 6px var(--red); animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── HUD ── */
+#hud {
+  position: fixed;
+  top: 48px; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 16px;
+  pointer-events: none;
+}
+.hud-card {
+  background: rgba(10,10,30,0.85);
+  border: 1px solid rgba(0,229,255,0.25);
+  border-radius: 8px;
+  padding: 6px 14px;
+  text-align: center;
+  min-width: 70px;
+  backdrop-filter: blur(6px);
+}
+.hud-label { font-size: 0.55rem; color: #718096; letter-spacing: 2px; text-transform: uppercase; }
+.hud-val   { font-family: var(--font-head); font-size: 1.1rem; color: var(--cyan); }
+.hud-unit  { font-size: 0.6rem; color: #718096; }
+.hud-val.on  { color: var(--amber); text-shadow: 0 0 8px var(--amber); }
+.hud-val.motion { color: var(--red); text-shadow: 0 0 8px var(--red); }
+
+/* ── SCENE ── */
+#scene {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 48px);
+  margin-top: 48px;
+  overflow: hidden;
+}
+
+/* Sky */
+#sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #0a0a1e 0%, #1a1a3e 60%, #2d1b4e 100%);
+  transition: background 3s ease;
+}
+#sky.day    { background: linear-gradient(180deg, #1a6bb5 0%, #4a9fd4 50%, #87ceeb 100%); }
+#sky.dusk   { background: linear-gradient(180deg, #1a1a3e 0%, #6b2d5e 40%, #c0603a 80%, #e8a87c 100%); }
+#sky.dim    { background: linear-gradient(180deg, #0d1b2a 0%, #1a2d4a 60%, #2d3a5e 100%); }
+#sky.night  { background: linear-gradient(180deg, #020208 0%, #050510 60%, #0a0a1e 100%); }
+
+/* Stars */
+#stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s;
+}
+#stars.visible { opacity: 1; }
+
+/* Clouds */
+#clouds { position: absolute; inset: 0; pointer-events: none; }
+.cloud {
+  position: absolute;
+  width: 120px; height: 40px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 50px;
+  filter: blur(8px);
+  animation: drift linear infinite;
+}
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+.cloud::before { width: 60px; height: 60px; top: -20px; left: 20px; }
+.cloud::after  { width: 40px; height: 40px; top: -10px; left: 60px; }
+@keyframes drift { from { transform: translateX(-200px); } to { transform: translateX(110vw); } }
+
+/* Sun / Moon */
+#sun-moon {
+  position: absolute;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  top: 15%; right: 15%;
+  transition: all 3s ease;
+  background: radial-gradient(circle, #fffde7, #fff176);
+  box-shadow: 0 0 40px #fff176, 0 0 80px rgba(255,241,118,0.4);
+}
+#sun-moon.moon {
+  background: radial-gradient(circle, #e8e8e8, #c0c0c0);
+  box-shadow: 0 0 20px rgba(200,200,200,0.4);
+  width: 44px; height: 44px;
+}
+
+/* Rain */
+#rain-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s;
+}
+#rain-canvas.raining { opacity: 1; }
+
+/* Buildings */
+#buildings {
+  position: absolute;
+  bottom: 38%;
+  left: 0; right: 0;
+  height: 250px;
+  pointer-events: none;
+}
+.building {
+  position: absolute;
+  bottom: 0;
+  background: linear-gradient(180deg, #1a1a3a 0%, #0d0d1e 100%);
+  border-top: 2px solid rgba(0,229,255,0.15);
+}
+.building::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 12px,
+    rgba(255,220,100,0.06) 12px,
+    rgba(255,220,100,0.06) 14px
+  ),
+  repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 14px,
+    rgba(255,220,100,0.06) 14px,
+    rgba(255,220,100,0.06) 16px
+  );
+}
+
+/* Trees */
+#trees { position: absolute; bottom: 37%; left: 0; right: 0; pointer-events: none; }
+.tree {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 55px solid #1a3a1a;
+  filter: drop-shadow(0 0 4px rgba(0,100,0,0.3));
+}
+.tree::after {
+  content: '';
+  position: absolute;
+  top: 20px; left: -12px;
+  width: 0; height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 35px solid #1a3a1a;
+}
+
+/* Road */
+#road {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 37%;
+  background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+  border-top: 3px solid #333;
+}
+#road::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0,229,255,0.1) 50%, transparent 100%);
+}
+#road-markings {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  display: flex;
+  gap: 40px;
+  padding: 0 20px;
+  animation: road-scroll 2s linear infinite;
+}
+.dash {
+  flex-shrink: 0;
+  width: 60px; height: 4px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 2px;
+}
+@keyframes road-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100px); }
+}
+
+/* Street lights */
+.street-light {
+  position: absolute;
+  bottom: 37%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pole {
+  width: 6px;
+  height: 160px;
+  background: linear-gradient(180deg, #888 0%, #555 100%);
+  border-radius: 3px;
+}
+.arm {
+  position: absolute;
+  top: 0;
+  width: 50px; height: 6px;
+  background: #777;
+  border-radius: 3px;
+  transform-origin: left center;
+  transform: rotate(-15deg);
+  left: 3px;
+}
+.lamp-housing {
+  position: absolute;
+  top: -18px;
+  left: 38px;
+  width: 36px; height: 18px;
+  background: #444;
+  border-radius: 4px 4px 8px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lamp {
+  width: 24px; height: 10px;
+  border-radius: 3px;
+  background: #333;
+  transition: background 0.6s, box-shadow 0.6s;
+}
+.lamp.on {
+  background: #fffde7;
+  box-shadow: 0 0 12px #fff176, 0 0 24px rgba(255,241,118,0.8);
+}
+.glow-halo {
+  position: absolute;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  top: -20px; left: -12px;
+  background: radial-gradient(circle, rgba(255,241,118,0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.6s;
+  pointer-events: none;
+}
+.glow-halo.on { opacity: 1; }
+
+.light-cone {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  width: 0; height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-top: 200px solid rgba(255,241,118,0);
+  transform: translateX(-50%);
+  transition: border-top-color 0.6s;
+  pointer-events: none;
+}
+.light-cone.on {
+  border-top-color: rgba(255,241,118,0.08);
+}
+
+.ir-badge {
+  position: absolute;
+  top: 30px;
+  left: 50px;
+  font-size: 0.55rem;
+  font-family: var(--font-head);
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: rgba(0,229,255,0.15);
+  border: 1px solid rgba(0,229,255,0.3);
+  color: var(--cyan);
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+.ir-badge.active {
+  background: rgba(255,23,68,0.2);
+  border-color: var(--red);
+  color: var(--red);
+  box-shadow: 0 0 8px rgba(255,23,68,0.4);
+}
+
+/* Vehicles */
+.vehicle {
+  position: absolute;
+  bottom: calc(37% + 20px);
+  font-size: 2rem;
+  transition: none;
+  will-change: transform;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+}
+.vehicle.person { font-size: 1.6rem; bottom: calc(37% + 10px); }
+
+/* Fog */
+#fog {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(200,220,255,0.08) 100%);
+  transition: opacity 2s;
+}
+#fog.humid { opacity: 1; }
+
+/* Environment label */
+#env-label {
+  position: absolute;
+  bottom: 38%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-head);
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 3px;
+  pointer-events: none;
+}
+
+/* ── HISTORY PANEL ── */
+#history-panel {
+  background: rgba(10,10,26,0.95);
+  border-top: 1px solid rgba(0,229,255,0.2);
+  padding: 16px 20px 24px;
+}
+.panel-title {
+  font-family: var(--font-head);
+  font-size: 0.7rem;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+.chart-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(0,229,255,0.1);
+  border-radius: 8px;
+  padding: 10px;
+  height: 180px;
+  position: relative;
+}

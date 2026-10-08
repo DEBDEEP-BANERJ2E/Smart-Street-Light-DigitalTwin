@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Street Light — Fault Detection</title>
+  <link rel="stylesheet" href="css/ml-shared.css"/>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="nav-title">⚡ SMART STREET LIGHT — DIGITAL TWIN</span>
+  <div class="nav-links">
+    <a href="index.html"           class="nav-link">🌆 Scene</a>
+    <a href="graph.html"           class="nav-link">🔗 Node Graph</a>
+    <a href="analytics.html"       class="nav-link">📊 Analytics</a>
+    <a href="prediction.html"      class="nav-link">🤖 Prediction</a>
+    <a href="fault-detection.html" class="nav-link active">⚠️ Fault Detection</a>
+    <a href="fault-correction.html"class="nav-link">🔧 Fault Correction</a>
+  </div>
+  <div id="ml-status-dot" class="ml-status-dot" title="ML Service status"></div>
+</nav>
+
+<div id="ml-banner" class="ml-banner"></div>
+
+<main class="ml-page">
+
+  <!-- ── SUMMARY COUNTS ── -->
+  <div class="section-title">⚠️ Fault Summary</div>
+  <div class="count-grid">
+    <div class="count-card">
+      <div class="count-card-num" id="count-anomalies">--</div>
+      <div class="count-card-label">Total Anomalies</div>
+    </div>
+    <div class="count-card">
+      <div class="count-card-num" id="count-stuck">--</div>
+      <div class="count-card-label">Stuck Sensors</div>
+    </div>
+    <div class="count-card">
+      <div class="count-card-num" id="count-outliers">--</div>
+      <div class="count-card-label">Outlier Readings</div>
+    </div>
+  </div>
+
+  <!-- ── LDR ANOMALY CHART ── -->
+  <div class="section-title">📉 LDR Anomaly Chart</div>
+  <div class="panel">
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chart-anomaly-ldr"></canvas>
+    </div>
+  </div>
+
+  <!-- ── STUCK SENSORS TABLE ── -->
+  <div class="section-title">🔒 Stuck Sensors</div>
+  <div class="panel">
+    <div id="stuck-table-wrap">
+      <div class="empty-state">Loading...</div>
+    </div>
+  </div>
+
+  <!-- ── OUTLIERS TABLE ── -->
+  <div class="section-title">📌 Outlier Readings</div>
+  <div class="panel">
+    <div id="outliers-table-wrap">
+      <div class="empty-state">Loading...</div>
+    </div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="js/ml-api.js"></script>
+<script src="js/fault-detection-page.js"></script>
+</body>
+</html>
